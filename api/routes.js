@@ -4,10 +4,9 @@ module.exports = function(app) {
   
     app.route('/auth')
       .get(user.get)
-      .post(user.store);
+      .post(user.store)
+      .patch(user.update);
   
-    // app.route('/products/:productId')
-    //   .get(productsCtrl.detail)
-    //   .put(productsCtrl.update)
-    //   .delete(productsCtrl.delete);
+    app.route('/auth/:userId')
+    .patch(user.update);
   };

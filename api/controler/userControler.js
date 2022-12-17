@@ -3,10 +3,12 @@ const db = require('./../db')
 var jwt = require('jsonwebtoken');
 module.exports={
     get: (req, res) => {
-        let sql = 'SELECT * FROM user WHERE '
+        let data=req.body;
+        let sql = `SELECT * FROM user WHERE email='${data.email}' and password='${data.password}'`;
         db.query(sql, (err, response) => {
             if (err) throw err
-            res.json(response)
+            console.log(response[0].email)
+            res.json({jwt:jwt.sign({ email: response[0].email }, 'vantran'),userInfor:response[0]})
         })
     },
     detail: (req, res) => {
@@ -18,11 +20,15 @@ module.exports={
     },
     update: (req, res) => {
         let data = req.body;
-        let productId = req.params.productId;
-        let sql = 'UPDATE products SET ? WHERE id = ?'
-        db.query(sql, [data, productId], (err, response) => {
+        let id = req.params.userId;
+        let sql = 'UPDATE user SET ? WHERE id = ?'
+        console.log(req.headers.authorization);
+        db.query(sql, [data, id], (err, response) => {
             if (err) throw err
-            res.json({message: 'Update success!'})
+            let query=`select * from user where id=${id}`
+            db.query(query,null,(err,response)=>{
+                res.json({userInfor:response[0]});
+            })
         })
     },
     store: (req, res) => {
