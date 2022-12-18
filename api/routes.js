@@ -1,6 +1,7 @@
 
 module.exports = function(app) {
     let user = require('./controler/userControler');
+    let post =require('./controler/postControler')
   
     app.route('/auth')
       .get(user.get)
@@ -9,4 +10,7 @@ module.exports = function(app) {
   
     app.route('/auth/:userId')
     .patch(user.update);
+
+    app.route('/post')
+    .post(post.store);
   };
